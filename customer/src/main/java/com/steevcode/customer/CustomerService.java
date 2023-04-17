@@ -1,5 +1,6 @@
 package com.steevcode.customer;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -8,11 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public record CustomerService(CustomerRepository customerRepository) {
+@AllArgsConstructor
+public class CustomerService {
+
+    private final CustomerRepository customerRepository;
+
     public ResponseEntity<Customer> registerCustomer(CustomerRequestDTO request) {
-        if (customerRepository.existsByEmail(request.email())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
 
         Customer customer = Customer.builder()
                 .firstname(request.firstname())
@@ -20,7 +22,16 @@ public record CustomerService(CustomerRepository customerRepository) {
                 .email(request.email())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerRepository.save(customer));
+        // todo: check if email exists
+        if (customerRepository.existsByEmail(customer.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+
+        // todo: check if fraudster
+
+       customerRepository.save(customer);
+
+        // todo: send notification
     }
 
     public Optional<Customer> getCustomer(Integer customerId) {

@@ -1,5 +1,6 @@
 package com.steevcode.customer;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/customer")
-public record CustomerController(CustomerService customerService) {
+@AllArgsConstructor
+public class CustomerController {
+
+   private final CustomerService customerService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Customer>> getCustomer(@PathVariable Integer id){
