@@ -26,8 +26,8 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerRequestDTO customerRequest){
-        return customerService.registerCustomer(customerRequest);
+    public void createCustomer(@RequestBody CustomerRequestDTO customerRequest){
+       customerService.registerCustomer(customerRequest);
     }
 
     @PutMapping("/{id}")
